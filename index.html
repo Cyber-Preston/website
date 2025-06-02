@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CyberSec Portfolio</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto Mono', monospace;
+      overflow-x: hidden;
+      background: #000;
+      color: #cfcfcf;
+      position: relative;
+    }
+    a {
+      color: #00ff00;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Matrix Code Rain Canvas */
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: #000;
+    }
+
+    /* Tech Grid Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: 
+        linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+    nav .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav ul li {
+      font-weight: 500;
+      font-family: 'Orbitron', sans-serif;
+      color: #cfcfcf;
+      text-shadow: 0 0 5px rgba(0,255,0,0.7);
+    }
+    nav ul li a {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+    }
+
+    /* Section Containers */
+    .section {
+      min-height: 100vh;
+      padding: 6rem 2rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      z-index: 5;
+    }
+    .section h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #00ff00;
+      text-shadow: 0 0 10px rgba(0,255,0,0.8);
+      animation: glowText 2s infinite alternate;
+    }
+    .section p {
+      max-width: 800px;
+      line-height: 1.6;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Neon Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      color: #000;
+      background: #00ff00;
+      border: 2px solid #00ff00;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      text-shadow: 0 0 8px #00ff00;
+    }
+    .btn:hover {
+      background: transparent;
+      color: #00ff00;
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    /* Sections Specific Background Overlays */
+    #about { background: rgba(0, 0, 0, 0.3); }
+    #resume { background: rgba(0, 0, 0, 0.4); }
+    #projects { background: rgba(0, 0, 0, 0.3); }
+    #contact { background: rgba(0, 0, 0, 0.4); }
+
+    /* Resume List */
+    .resume-list {
+      text-align: left;
+      max-width: 800px;
+      margin: 1rem auto;
+      list-style: none;
+    }
+    .resume-list li {
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 1.5rem;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .resume-list li::before {
+      content: ">";
+      position: absolute;
+      left: 0;
+      color: #00ff00;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .project-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 255, 0, 0.5);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+    .project-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 0.5rem;
+      color: #00ff00;
+      text-shadow: 0 0 5px rgba(255,255,255,0.7);
+    }
+    .project-card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .project-card a {
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: 500;
+      color: #00ff00;
+      text-decoration: underline;
+      text-shadow: 0 0 5px #00ff00;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Contact Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      width: 100%;
+      margin-top: 2rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 255, 0, 0.5);
+      border-radius: 4px;
+      padding: 0.75rem;
+      color: #cfcfcf;
+      font-family: 'Roboto Mono', monospace;
+      resize: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(207,207,207,0.6);
+    }
+    .contact-form button {
+      align-self: flex-start;
+      background: #00ff00;
+      color: #000;
+      border: 2px solid #00ff00;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .contact-form button:hover {
+      background: transparent;
+      color: #00ff00;
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    /* Glowing Text Animation */
+    @keyframes glowText {
+      from {
+        text-shadow: 0 0 10px rgba(0,255,0,0.7),
+                     0 0 20px rgba(0,191,0,0.8);
+      }
+      to {
+        text-shadow: 0 0 20px rgba(0,255,0,1),
+                     0 0 30px rgba(0,191,0,1),
+                     0 0 40px rgba(0,255,0,1);
+      }
+    }
+
+    /* Scroll-Snap for Full-Page Feel */
+    html {
+      scroll-behavior: smooth;
+    }
+    .section {
+      scroll-snap-align: start;
+    }
+    #wrapper {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas for Matrix Code Rain -->
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="#about" class="logo">CyberCore</a>
+    <ul>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#resume">RESUME</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <!-- Wrapper for Scroll-Snap Sections -->
+  <div id="wrapper">
+    <!-- About Section -->
+    <section id="about" class="section">
+      <h1>ABOUT ME</h1>
+      <p>
+        Greetings! I'm <strong>Your Name</strong>, a cybersecurity specialist who bridges the gap between code and protection. 
+        I build secure, resilient systems—whether that's pen-testing enterprise networks, hardening web applications, or 
+        architecting zero-trust infrastructures. Off the clock, I reverse engineer malware, participate in CTFs, and mentor junior security pros.
+      </p>
+      <a href="#projects" class="btn">SEE PROJECTS</a>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="section">
+      <h1>RESUME</h1>
+      <ul class="resume-list">
+        <li>
+          <strong>Cybersecurity Engineer @ SecureWave Inc.</strong> (Mar 2024 – Present)<br/>
+          • Conducted red team assessments, uncovering critical vulnerabilities in 10+ enterprise apps.<br/>
+          • Deployed SIEM solutions and automated threat hunting scripts, reducing incident response time by 50%.<br/>
+          • Led security workshops, training 200+ developers on secure coding practices.
+        </li>
+        <li>
+          <strong>Security Analyst @ CyberGuard Solutions</strong> (Aug 2023 – Feb 2024)<br/>
+          • Monitored IDS/IPS alerts, triaged events, and escalated high-severity threats.<br/>
+          • Developed Python tools for log parsing and anomaly detection, improving detection accuracy by 30%.
+        </li>
+        <li>
+          <strong>B.S. in Information Security</strong>, Tech State University (2020 – 2024)<br/>
+          • GPA: 3.9/4.00<br/>
+          • Coursework: Penetration Testing, Cryptography, Network Security, Digital Forensics.
+        </li>
+      </ul>
+      <!-- Updated link to download resume.pdf -->
+      <a href="resume.pdf" download class="btn">DOWNLOAD RESUME</a>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+      <h1>PROJECTS</h1>
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card">
+          <h3>🔍 VulnScan Framework</h3>
+          <p>An extensible Python-based vulnerability scanning framework that automates reconnaissance, exploit scanning, and reporting. 
+             Integrates with Metasploit and custom scripts for CI/CD security checks.
+          </p>
+          <a href="#">VIEW ON GITHUB →</a>
+        </div>
+        <!-- Project 2 -->
+        <div class="project-card">
+          <h3>🛡️ SecurePortal</h3>
+          <p>A Node.js web application with built-in zero-trust architecture, using JWT, RBAC, and multi-factor authentication. 
+             Includes a live dashboard for monitoring user sessions and security events.
+          </p>
+          <a href="#">LIVE DEMO →</a>
+        </div>
+        <!-- Project 3 -->
+        <div class="project-card">
+          <h3>⚙️ MalwareAnalyzer</h3>
+          <p>A sandboxed environment written in Go that dynamically analyzes malware samples, 
+             extracting IOCs (Indicators of Compromise) and generating detailed behavior reports.
+          </p>
+          <a href="#">LEARN MORE →</a>
+        </div>
+        <!-- Project 4 -->
+        <div class="project-card">
+          <h3>🚀 ThreatIntel Dashboard</h3>
+          <p>A React + D3.js dashboard that aggregates threat intelligence feeds (OpenCTI, VirusTotal) 
+             and visualizes real-time threat maps, attack chains, and TTPs.
+          </p>
+          <a href="#">CHECK IT OUT →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+      <h1>CONTACT</h1>
+      <p>Have a secure project, a compliance question, or just want to collaborate? Send me a message!</p>
+      <form class="contact-form" action="mailto:your.email@example.com" method="POST" enctype="text/plain">
+        <input type="text" name="name" placeholder="Your Name" required/>
+        <input type="email" name="email" placeholder="Your Email" required/>
+        <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+        <button type="submit">SEND MESSAGE</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Matrix Code Rain Script -->
+  <script>
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    const fontSize = 16;
+    const columns = Math.floor(width / fontSize);
+
+    // Create an array of drops (y positions) for each column
+    const drops = Array(columns).fill(1);
+
+    // Characters to use (binary and hex mix)
+    const chars = "01ABCDEF0123456789".split("");
+
+    function draw() {
+      // Black translucent background to create fading effect
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = "#00FF00"; // Bright green
+      ctx.font = fontSize + "px 'Courier New'";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(text, x, y);
+
+        // Reset drop when it goes off screen
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    // Resize canvas on window resize
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    // Loop the draw function at 60fps
+    setInterval(draw, 50);
+  </script>
+</body>
+</html>

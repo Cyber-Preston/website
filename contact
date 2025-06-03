@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Me</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+      background-color: #fafafa;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .contact-info {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .contact-info a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contact Me</h1>
+  <div class="contact-info">
+    <p>You can find me on GitHub:</p>
+    <p><a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">github.com/yourusername</a></p>
+    <p>Or send me an email:</p>
+    <p><a href="mailto:your.email@example.com">your.email@example.com</a></p>
+  </div>
+</body>
+</html>
